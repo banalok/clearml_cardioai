@@ -18,7 +18,6 @@ from clearml import Task
 from patchless_nnunet import utils, setup_root
 import os
 
-Task.add_requirements("F:\clearml_cardioai\requirements1.txt")
 log = utils.get_pylogger(__name__)
 
 class PatchlessPreprocessd(MapTransform):
