@@ -18,7 +18,7 @@ from clearml import Task
 from patchless_nnunet import utils, setup_root
 import os
 
-Task.force_requirements_env_freeze(True, "requirements1.txt")
+Task.add_requirements("F:\clearml_cardioai\requirements1.txt")
 log = utils.get_pylogger(__name__)
 
 class PatchlessPreprocessd(MapTransform):
@@ -145,7 +145,9 @@ class PatchlessnnUnetPredictor:
         """
 
         # Initialize ClearML task
-        task = Task.init(project_name="Initial_prediction", task_name="inference")
+        #Task.create(repo="https://github.com/banalok/clearml_cardioai.git")
+        task = Task.init(project_name="Initial_prediction", task_name="inference") 
+        task.set_repo(repo="https://github.com/banalok/clearml_cardioai.git", branch="main")       
         task.execute_remotely(queue_name="default", exit_process=True)
         # apply extra utilities
         # (e.g. ask for tags if none are provided in cfg, print cfg tree, etc.)
