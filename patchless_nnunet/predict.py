@@ -123,7 +123,7 @@ class PatchlessnnUnetPredictor:
         return tensor_list
 
     @staticmethod
-    @hydra.main(version_base="1.3", config_path="configs", config_name="predict")
+    @hydra.main(version_base="1.3", config_path="./configs", config_name="predict")
     @utils.task_wrapper
     def run_system(cfg: DictConfig) -> Tuple[dict, dict]:
         """Predict unseen cases with a given checkpoint.
