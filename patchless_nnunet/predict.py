@@ -19,7 +19,8 @@ from patchless_nnunet import utils, setup_root
 import os
 
 log = utils.get_pylogger(__name__)
-
+hydra.initialize_config_dir("F:\clearml_cardioai\patchless_nnunet\configs")
+cfg = hydra.compose(config_name="predict")
 class PatchlessPreprocessd(MapTransform):
     """Load and preprocess data path given in dictionary keys.
 
@@ -84,7 +85,7 @@ class PatchlessnnUnetPredictor:
         cls.pre_run_routine()
 
         # Run the system with config loaded by @hydra.main
-        cls.run_system()
+        cls.run_system(cfg)
 
     @classmethod
     def pre_run_routine(cls) -> None:
@@ -123,7 +124,7 @@ class PatchlessnnUnetPredictor:
         return tensor_list
 
     @staticmethod
-    @hydra.main(version_base="1.3", config_path="configs", config_name="predict")
+    #@hydra.main(version_base="1.3", config_path="configs", config_name="predict")
     @utils.task_wrapper
     def run_system(cfg: DictConfig) -> Tuple[dict, dict]:
         """Predict unseen cases with a given checkpoint.
@@ -145,12 +146,13 @@ class PatchlessnnUnetPredictor:
 
         # Initialize ClearML task
         #Task.create(repo="https://github.com/banalok/clearml_cardioai.git")
+        Task.force_requirements_env_freeze(requirements_file="requirements.txt")
         task = Task.init(project_name="local_prediction", task_name="local_inference") 
         task.set_repo(repo="https://github.com/banalok/clearml_cardioai.git", branch="main")       
         task.execute_remotely(queue_name="default", exit_process=True)
         # apply extra utilities
         # (e.g. ask for tags if none are provided in cfg, print cfg tree, etc.)
-        utils.extras(cfg)
+        #utils.extras(cfg)
 
         if not cfg.ckpt_path:
             raise ValueError("ckpt_path must not be empty!")
@@ -187,9 +189,11 @@ class PatchlessnnUnetPredictor:
 
         metric_dict = trainer.callback_metrics
 
-        # Log metrics to ClearML
-        task.connect(trainer.callback_metrics)
-        
+        for key, value in metric_dict.items():
+          task.get_logger().report_scalar(key, value)
+
+        task.connect(object_dict)      
+                
         return metric_dict, object_dict
 
 
