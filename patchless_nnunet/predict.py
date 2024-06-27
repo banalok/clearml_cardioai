@@ -146,7 +146,7 @@ class PatchlessnnUnetPredictor:
 
         # Initialize ClearML task
         #Task.create(repo="https://github.com/banalok/clearml_cardioai.git")
-        Task.force_requirements_env_freeze(requirements_file="requirements.txt")
+        #Task.force_requirements_env_freeze(requirements_file="requirements.txt")
         task = Task.init(project_name="local_prediction", task_name="local_inference") 
         task.set_repo(repo="https://github.com/banalok/clearml_cardioai.git", branch="main")       
         task.execute_remotely(queue_name="default", exit_process=True)
