@@ -192,7 +192,7 @@ class PatchlessnnUnetPredictor:
         for key, value in metric_dict.items():
           task.get_logger().report_scalar(key, value)
 
-        task.connect(object_dict)      
+        task.connect(object_dict)           
                 
         return metric_dict, object_dict
 
