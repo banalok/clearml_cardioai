@@ -39,6 +39,7 @@ hydra-optuna-sweeper = "==1.2.0"
 wandb = "*"
 tensorboardX = "*"
 pyrootutils = "*"
+python-dotenv = "==1.0.1"
 rich = "*"
 sh = { version = "*", markers = "sys_platform == 'win32'" }
 torchinfo = "*"
